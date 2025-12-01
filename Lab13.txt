@@ -1,0 +1,53 @@
+1. There is a fault in the program at the line
+for ( int i = 1 ; i <attendance_records.size( ); ++i ) {
+The loop should start at 0, but in this case it starts at 1.
+This means that the first lectures attendance is not counted at all.
+
+2. A test case that would not execute the fault would not exist. Since the program requires
+an array of 10 ints. When given the array the first value would always not be counted in
+the program, resulting in executing the fault.
+
+3. A test case that would execute the fault but not result in an error state
+would be: [1, 0, 1, 1, 1, 1, 1, 1, 1, 1] Since the first attendance was marked as
+present, the fault would be executed, but since the amount of absences is correct, the
+test case does not result in an error state.
+
+4. A test case that has an error state but not a failure would be:
+[0,0,1,1,1,1,1,1,1,1]. This set would would prodcue an error state since there
+would be an incorrect number of absenses, (error state) but not a failure since
+the student did not miss three classes with or without the fault.
+
+5. A test case resulting in a failure would be:
+[0, 0, 0, 1, 1, 1, 1, 1, 1, 1] Since the first value would not be accounted for
+the student would pass the class. This is a direct failure since the student missed
+three classes meaning he should have failed.
+
+Given Code:
+
+bool fail_lecture(const vector<int>& attendance_records) {
+    int absent_count = 0;
+    for (int i = 1; i < attendance_records.size(); ++i) {
+        absent_count += (attendance_records[i] == 0);
+    }
+    return absent_count >= 3;
+
+Fixed Code used for testing
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+bool fail_lecture(const vector<int>& attendance_records) {
+    int absent_count = 0;
+    for (int i = 0; i < attendance_records.size(); ++i) {
+        absent_count += (attendance_records[i] == 0);
+    }
+    return absent_count >= 3;
+}
+
+int main() {
+    vector<int> test = {1,1,1,1,1,1,1,1,1,1};
+    cout << "End = " << fail_lecture(test) << endl;
+    return 0;
+}
+
